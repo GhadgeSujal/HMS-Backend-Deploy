@@ -2,7 +2,8 @@
 FROM maven:3.9.9-eclipse-temurin-21 AS build
 WORKDIR /app
 COPY . .
-RUN ./mvnw -DskipTests clean package
+# mvnw can lose executable bit when committed from Windows; ensure it's runnable in Linux
+RUN chmod +x mvnw && ./mvnw -DskipTests clean package
 
 # Run stage
 FROM eclipse-temurin:21-jre
